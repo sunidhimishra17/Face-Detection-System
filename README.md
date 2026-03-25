@@ -33,10 +33,10 @@ Clone the repository:
 git clone https://github.com/sunidhimishra17/Face-Detection-System.git
 
 Install dependencies:
-pip install opencv-python numpy
+pip install -r requirements.txt
 
 Run the application:
-python src/face_detect.py
+python main.py
 
 # Future Enhancements
 ​Integration of Deep Learning (CNN) models for higher accuracy in low-light conditions.
