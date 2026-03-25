@@ -22,8 +22,10 @@ Tools: NumPy (for array manipulation)
 # How to Run
 Clone the repository: 
 git clone https://github.com/sunidhimishra17/Face-Detection-System.git
+
 Install dependencies:
 pip install opencv-python numpy
+
 Run the application:
 python src/face_detect.py
 
