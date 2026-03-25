@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Human Face Detection System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Human Face Detection Dashboard</h1>
+
+        <!-- Notification Area -->
+        {% if message %}
+        <div class="alert alert-info" role="alert">
+            {{ message }}
+        </div>
+        {% endif %}
+
+        <!-- Known Faces Section -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Known Faces</span>
+                <!--<a href="/update_faces" class="btn btn-outline-secondary btn-sm">Refresh List</a> -->
+            </div>
+            <div class="card-body">
+                <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search for a face..." onkeyup="filterFaces()">
+                <ul class="list-group list-group-flush" id="faceList">
+                    {% for face in known_faces %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ face }}
+                        <a href="/delete_face/{{ face }}" class="btn btn-sm btn-danger">Delete</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <a href="/add_face" class="btn btn-primary mb-3">Add New Face</a>
+
+        <!-- Logs Section -->
+        <!--<div class="card mb-4">
+            <div class="card-header">Face Detection Logs</div>
+            <div class="card-body">
+                {% if logs %}
+                <ul class="list-group list-group-flush">
+                    {% for log in logs %}
+                    <li class="list-group-item">
+                        <strong>{{ log.timestamp }}</strong>: {{ log.message }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No logs available.</p>
+                {% endif %}
+            </div>
+        </div> -->
+
+        <!-- Settings Section -->
+        <!--<div class="card mb-4">
+            <div class="card-header">Advanced Settings</div>
+            <div class="card-body">
+                <form action="/update_settings" method="POST">
+                    <div class="form-group">
+                        <label for="recognitionThreshold">Detection Threshold</label>
+                        <input type="number" id="recognitionThreshold" name="recognitionThreshold" class="form-control" value="{{ settings.recognitionThreshold }}" step="0.01" min="0" max="1">
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="maxLogs">Maximum Logs to Display</label>
+                        <input type="number" id="maxLogs" name="maxLogs" class="form-control" value="{{ settings.maxLogs }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Save Settings</button>
+                </form>
+            </div>
+        </div> -->
+        
+        <p><a href="/logout" class="btn btn-secondary">Logout</a></p>
+    </div>
+
+    <script>
+    function filterFaces() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const ul = document.getElementById("faceList");
+        const li = ul.getElementsByTagName('li');
+
+        for (let i = 0; i < li.length; i++) {
+            const txtValue = li[i].textContent || li[i].innerText;
+            li[i].style.display = txtValue.toLowerCase().includes(filter) ? "" : "none";
+        }
+    }
+
+    // Fetch known faces on load
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch("/get_known_faces")
+            .then(response => response.json())
+            .then(data => {
+                const faceList = document.getElementById("faceList");
+                faceList.innerHTML = "";
+                data.known_faces.forEach(face => {
+                    const li = document.createElement("li");
+                    li.className = "list-group-item d-flex justify-content-between align-items-center";
+                    li.innerHTML = `${face} <a href="/delete_face/${face}" class="btn btn-sm btn-danger">Delete</a>`;
+                    faceList.appendChild(li);
+                });
+            })
+            .catch(error => console.error("Error fetching known faces:", error));
+    });
+    </script>
+</body>
+</html>

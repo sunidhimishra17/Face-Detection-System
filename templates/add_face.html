@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Face{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Add a New Face</h1>
+    <form method="POST" action="/add_face" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Face Image</label>
+            <input type="file" class="form-control-file" id="image" name="image" accept="image/*" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Face</button>
+    </form>
+</div>
+{% endblock %}
